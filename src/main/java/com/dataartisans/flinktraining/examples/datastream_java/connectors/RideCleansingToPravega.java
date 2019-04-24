@@ -55,7 +55,7 @@ public class RideCleansingToPravega {
                 // filter out rides that do not start or stop in NYC
                 .filter(new NYCFilter());
 
-        // create the Pravega sink to write a stream of text
+        // create the Pravega sink to write a stream of taxi rides
         FlinkPravegaWriter<TaxiRide> writer = FlinkPravegaWriter.<TaxiRide>builder()
                 .withPravegaConfig(pravegaConfig)
                 .forStream(stream)
@@ -63,7 +63,10 @@ public class RideCleansingToPravega {
                 .withSerializationSchema(new TaxiRideSchema())
                 .build();
         // write the filtered data to a pravega sink
-        filteredRides.addSink(writer);
+        filteredRides.addSink(writer).name("Pravega Stream");
+
+        //print the output
+        filteredRides.print().name("stdout");
 
         // run the cleansing pipeline
         env.execute("Taxi Ride Cleansing");

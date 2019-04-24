@@ -42,7 +42,6 @@ import io.pravega.connectors.flink.FlinkPravegaReader;
 
 public class PopularPlacesFromPravega {
 
-    private static final String PRAVEGA_CONTROLLER_URI = "tcp://127.0.0.1:9090";
     public static final String CLEANSE_PRAVEGA_STREAM_NAME = "cleansedRides";
     public static final String PRAVEGA_SCOPE = "training";
     private static final int MAX_EVENT_DELAY = 60; // rides are at most 60 sec out-of-order.
@@ -55,6 +54,10 @@ public class PopularPlacesFromPravega {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
         env.getConfig().setAutoWatermarkInterval(1000);
+        // parallelism # should be equal or less of nb of segments
+        // otherwise, in this example the watermark won't advance
+        // causing window not to be triggered
+        env.setParallelism(1);
 
         // initialize the parameter utility tool in order to retrieve input parameters
         ParameterTool params = ParameterTool.fromArgs(args);
@@ -67,7 +70,7 @@ public class PopularPlacesFromPravega {
                 CLEANSE_PRAVEGA_STREAM_NAME,
                 StreamConfiguration.builder().build());
 
-        // create the Pravega source to read a stream of text
+        // create the Pravega source to read a stream of taxi rides
         FlinkPravegaReader<TaxiRide> consumer = FlinkPravegaReader.<TaxiRide>builder()
                 .withPravegaConfig(pravegaConfig)
                 .forStream(stream)
@@ -94,8 +97,8 @@ public class PopularPlacesFromPravega {
                 // map grid cell to coordinates
                 .map(new GridToCoordinates());
 
-        popularPlaces.print();
-
+       // rides.print().name("print raw data from pravega");
+        popularPlaces.print().name("popular places in NY");
         // execute the transformation pipeline
         env.execute("Popular Places from Pravega");
     }

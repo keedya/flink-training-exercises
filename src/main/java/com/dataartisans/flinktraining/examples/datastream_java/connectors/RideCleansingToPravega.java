@@ -23,8 +23,7 @@ public class RideCleansingToPravega {
 
     private static final String PRAVEGA_CONTROLLER_URI = "tcp://127.0.0.1:9090";
     public static final String CLEANSE_PRAVEGA_STREAM_NAME = "cleansedRides";
-    public static final String PRAVEGA_SCOPE = "training";
-    protected static final String STREAM_PARAM = "stream";
+    public static final String PRAVEGA_SCOPE = "workshop-samples";
 
     public static void main(String[] args) throws Exception {
 
@@ -85,7 +84,7 @@ public class RideCleansingToPravega {
 
         try(StreamManager streamManager = StreamManager.create(pravegaConfig.getClientConfig())) {
             // create the requested scope (if necessary)
-            streamManager.createScope(stream.getScope());
+            //streamManager.createScope(stream.getScope());
 
             // create the requested stream based on the given stream configuration
             streamManager.createStream(stream.getScope(), stream.getStreamName(), streamConfig);

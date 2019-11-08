@@ -52,10 +52,61 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.19</slf4j.version>
 		<flink.version>1.7.2</flink.version>
-		<scala.binary.version>2.11</scala.binary.version>
+		<scala.binary.version>2.12</scala.binary.version>
 		<junit.version>4.12</junit.version>
+		<connectors.version>0.6.0-58.d187222-SNAPSHOT</connectors.version>
+		<keycloak-credentials-version>0.6.0-2386.23b7340-0.13.0-W7-001.cacb6de</keycloak-credentials-version>
+		<pravegaVersion>0.6.0-2386.23b7340</pravegaVersion>
 	</properties>
+	<repositories>
+		<repository>
+			<id>JFrog</id>
+			<name>JFrog</name>
+			<url>https://oss.jfrog.org/artifactory/jfrog-dependencies</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 
+		<repository>
+			<id>apache.snapshots</id>
+			<name>Apache Development Snapshot Repository</name>
+			<url>https://repository.apache.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>http://central.maven.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>artifactory</id>
+			<name>Artifactory</name>
+			<url>http://asdrepo.isus.emc.com:8081/artifactory/nautilus-prerelease-local/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -68,7 +119,21 @@
 	</distributionManagement>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>io.pravega</groupId>
+			<artifactId>pravega-connectors-flink-1.7_2.12</artifactId>
+			<version>${connectors.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.pravega</groupId>
+			<artifactId>pravega-client</artifactId>
+			<version>${pravegaVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dellemc.nautilus</groupId>
+			<artifactId>pravega-keycloak-credentials</artifactId>
+			<version>${keycloak-credentials-version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-java</artifactId>
@@ -623,7 +688,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>

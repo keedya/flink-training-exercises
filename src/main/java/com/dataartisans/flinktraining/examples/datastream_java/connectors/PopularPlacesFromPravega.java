@@ -43,7 +43,7 @@ import io.pravega.connectors.flink.FlinkPravegaReader;
 public class PopularPlacesFromPravega {
 
     public static final String CLEANSE_PRAVEGA_STREAM_NAME = "cleansedRides";
-    public static final String PRAVEGA_SCOPE = "training";
+    public static final String PRAVEGA_SCOPE = "workshop-samples";
     private static final int MAX_EVENT_DELAY = 60; // rides are at most 60 sec out-of-order.
 
     public static void main(String[] args) throws Exception {
@@ -202,7 +202,7 @@ public class PopularPlacesFromPravega {
 
         try(StreamManager streamManager = StreamManager.create(pravegaConfig.getClientConfig())) {
             // create the requested scope (if necessary)
-            streamManager.createScope(stream.getScope());
+            //streamManager.createScope(stream.getScope());
 
             // create the requested stream based on the given stream configuration
             streamManager.createStream(stream.getScope(), stream.getStreamName(), streamConfig);
